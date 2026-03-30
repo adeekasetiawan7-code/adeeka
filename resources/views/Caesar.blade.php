@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cipher . caesar</title>
+    <title>Caesar Cipher</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -20,9 +20,11 @@
             color: white;
             transition: 0.3s;
         }
-.card:hover {
-    transform: scale(1.02);
-}
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
         .input-field {
             background: #1a1e24;
             border: 1px solid #2a313a;
@@ -34,6 +36,7 @@
             background: #242a33;
             border: 1px solid #37414b;
             border-radius: 10px;
+            color: white;
         }
 
         .result-area {
@@ -47,10 +50,10 @@
 
 <div class="card w-full max-w-xl">
 
-    <h2 class="text-xl mb-4">Caesar Cipher</h2>
+    <h2 class="text-xl mb-4 font-bold">Caesar Cipher</h2>
 
     <!-- FORM -->
-    <form method="POST" action="/caesar-process">
+    <form method="POST" action="/caesar">
         @csrf
 
         <!-- INPUT -->
@@ -89,9 +92,10 @@
     <!-- HASIL -->
     @if(isset($result))
     <div class="result-area mt-5 p-3">
-        <p id="resultText">{{ $result }}</p>
+        <p><b>Hasil:</b></p>
+        <p id="resultText" class="mt-2 text-green-400 font-bold">{{ $result }}</p>
 
-        <button onclick="copyText()" class="mt-2 bg-gray-700 px-3 py-1 rounded">
+        <button onclick="copyText()" class="mt-3 bg-gray-700 px-3 py-1 rounded">
             Copy
         </button>
     </div>
@@ -111,9 +115,12 @@
     const input = document.getElementById('inputText');
     const counter = document.getElementById('charCount');
 
-    input.addEventListener('input', function() {
-        counter.textContent = this.value.length + " huruf";
-    });
+    function updateCount() {
+        counter.textContent = input.value.length + " huruf";
+    }
+
+    input.addEventListener('input', updateCount);
+    updateCount();
 
     function copyText() {
         const text = document.getElementById('resultText').innerText;
