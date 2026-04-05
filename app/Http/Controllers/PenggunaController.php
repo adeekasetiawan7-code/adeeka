@@ -13,8 +13,8 @@ class PenggunaController extends Controller
 
     public function login(Request $request)
     {
-        if ($request->email == 'admin@gmail.com' && $request->password == '123456') {
-            return redirect('/dashboard');
+        if ($request->email == 'admin@gmail.com' && $request->password == '123456') { 
+        return redirect('/dashboard');
         }
 
         return back()->with('error', 'Login gagal');
