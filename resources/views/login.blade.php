@@ -183,7 +183,6 @@
         </form>
 
         <div class="login-footer">
-            <p>© 2026 Your App</p>
         </div>
     </div>
 
