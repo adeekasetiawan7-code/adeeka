@@ -3,21 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class PenggunaController extends Controller
-    //
-
-
 {
     public function loginForm()
     {
-         return view('login');
+        return view('login');
     }
 
     public function login(Request $request)
     {
-        if ($request->email == "adeekasetiawan7@gmail.com" && $request->password == "123456") {
-            session(['user' => $request->email]);
+        // validasi input
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        // cari user berdasarkan email
+        $user = User::where('email', $request->email)->first();
+
+        // cek user dan password hash
+        if ($user && Hash::check($request->password, $user->password)) {
+            session([
+                'user' => $user->email,
+                'name' => $user->name
+            ]);
+
             return redirect('/dashboard');
         }
 
@@ -30,12 +43,14 @@ class PenggunaController extends Controller
             return redirect('/login');
         }
 
-        return view('dashboard');
+        return view('Daftar_pengguna');
     }
 
     public function logout()
     {
         session()->forget('user');
+        session()->forget('name');
+
         return redirect('/login');
     }
 
