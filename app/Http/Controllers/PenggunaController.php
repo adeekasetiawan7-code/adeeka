@@ -15,20 +15,17 @@ class PenggunaController extends Controller
 
     public function login(Request $request)
     {
-        // validasi input
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required'
         ]);
 
-        // cari user berdasarkan email
         $user = User::where('email', $request->email)->first();
 
-        // cek user dan password hash
         if ($user && Hash::check($request->password, $user->password)) {
             session([
-                'user' => $user->email,
-                'name' => $user->name
+                'user'  => $user->email,
+                'name'  => $user->name ?? $user->email
             ]);
 
             return redirect('/dashboard');
@@ -39,28 +36,14 @@ class PenggunaController extends Controller
 
     public function dashboard()
     {
-        if (!session('user')) {
-            return redirect('/login');
-        }
+        $users = User::all();
 
-        return view('Daftar_pengguna');
+        return view('Daftar_pengguna', compact('users'));
     }
 
     public function logout()
     {
-        session()->forget('user');
-        session()->forget('name');
-
-        return redirect('/login');
-    }
-
-    public function index()
-    {
-        return "Halo dari controller";
-    }
-
-    public function create()
-    {
-        return "Simpan pengguna";
+        session()->flush();
+        return redirect('/login')->with('success', 'Anda telah logout');
     }
 }
