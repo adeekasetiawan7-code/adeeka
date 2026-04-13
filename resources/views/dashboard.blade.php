@@ -5,20 +5,23 @@
 @section('content')
 
 <style>
-    body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #003cff, #5d00ff, #00ff6a);
-        background-size: 300% 300%;
-        animation: bgMove 10s ease infinite;
-    }
 
-    @keyframes bgMove {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
+body {
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+background: linear-gradient(135deg, #003cff, #5d00ff, #00ff6a);
+background-size: 300% 300%;
+animation: gradientMove 10s ease infinite;
+padding: 20px;
+}
+
+@keyframes gradientMove {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+}
 
     .dashboard {
         max-width: 1250px;

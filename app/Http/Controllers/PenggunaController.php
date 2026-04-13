@@ -3,47 +3,87 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Pengguna;
 
 class PenggunaController extends Controller
 {
-    public function loginForm()
+    /**
+     * Display a listing of the resource.
+     */
+
+public function index()
+{
+    if (!session('login')) {
+    return redirect('/login');
+}
+    $users = Pengguna::all();
+
+    return view('daftar_pengguna', compact('users'));
+}
+
+    /**
+     * Show the form for creating a new resource.
+     */
+public function create()
+{
+    return view('tambah_pengguna');
+}
+
+    /**
+     * Store a newly created resource in storage.
+     */
+
+
+public function store(Request $request)
+{
+    Pengguna::create([
+        'email' => $request->email,
+        'password' => $request->password
+    ]);
+
+    return redirect('/daftar_pengguna');
+}
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        return view('login');
+        //
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required'
-        ]);
+    /**
+     * Show the form for editing the specified resource.
+     */
+ public function edit($id)
+{
+    $user = Pengguna::find($id);
+    return view('edit_pengguna', compact('user'));
+}
 
-        $user = User::where('email', $request->email)->first();
+    /**
+     * Update the specified resource in storage.
+     */
+ public function update(Request $request, $id)
+{
+    $user = Pengguna::find($id);
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            session([
-                'user'  => $user->email,
-                'name'  => $user->name ?? $user->email
-            ]);
+    $user->update([
+        'email' => $request->email,
+        'password' => $request->password
+    ]);
 
-            return redirect('/dashboard');
-        }
+    return redirect('/daftar_pengguna');
+}
 
-        return back()->with('error', 'Email atau password salah');
-    }
+    /**
+     * Remove the specified resource from storage.
+     */
+public function destroy($id)
+{
+    $user = Pengguna::find($id);
+    $user->delete();
 
-    public function dashboard()
-    {
-        $users = User::all();
-
-        return view('Daftar_pengguna', compact('users'));
-    }
-
-    public function logout()
-    {
-        session()->flush();
-        return redirect('/login')->with('success', 'Anda telah logout');
-    }
+    return redirect('/daftar_pengguna');
+}
 }
